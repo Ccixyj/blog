@@ -1,0 +1,18 @@
+hash: c7137d56ba013c97ef756780794e195c3ff12950f71d1f4441d58aa8311826d7
+updated: 2017-08-08T11:13:27.9956716+08:00
+imports:
+- name: github.com/astaxie/beego
+  version: cab8458c1c4a5a3b4bf5192922be620e6dede15b
+  subpackages:
+  - config
+  - context
+  - context/param
+  - grace
+  - logs
+  - orm
+  - session
+  - toolbox
+  - utils
+- name: github.com/go-sql-driver/mysql
+  version: 3955978caca48c1658a4bb7a9c6a0f084e326af3
+testImports: []

@@ -1,0 +1,7 @@
+package: BlogApi
+import:
+- package: github.com/astaxie/beego
+  version: 1.*
+  subpackages:
+  - orm
+- package: github.com/go-sql-driver/mysql
