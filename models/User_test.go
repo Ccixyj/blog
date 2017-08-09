@@ -16,7 +16,7 @@ func TestSalt(t *testing.T) {
 }
 
 func TestUser(t *testing.T) {
-	admin := generateAdmin()
+	admin := GenerateAdmin()
 	fmt.Println(admin)
 
 	fmt.Println(Password("45127996").doCompare(admin.Pwd))

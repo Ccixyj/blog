@@ -8,7 +8,6 @@ import (
 
 	"crypto/sha512"
 	"encoding/base64"
-	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"math/rand"
 	"strings"
@@ -57,7 +56,7 @@ func generateHash(salt string, oldPwd Password) string {
 
 type User struct {
 	ID      int64  `orm:"column(id)"`
-	Name    string `orm:"size(20)"`
+	Name    string `orm:"size(20);unique;index"`
 	Pwd     Password
 	Profile *Profile  `orm:"rel(fk);null;rel(one);on_delete(set_null)"`
 	Create  time.Time `orm:"auto_now_add;type(datetime)"`
@@ -67,32 +66,22 @@ type User struct {
 /**用户其他信息
  */
 type Profile struct {
-	ID     int64     `orm:"column(id)"`
-	User   *User     `orm:"reverse(one)"`
+	ID     int64 `orm:"column(id)"`
+	User   *User `orm:"reverse(one)"`
+	Desc   string
 	Update time.Time `orm:"auto_now;type(datetime)"`
 }
 
 func init() {
-	var admin = new(User)
-	admin.Name = "15152278073"
-	pwd := Password("45127996wind")
-	salt := pwd.GenerateSalt()
-	pwdStr := fmt.Sprintf("%x", sha512.New().Sum([]byte(salt+string(pwd))))
-	admin.Pwd = Password(fmt.Sprintf("%s$%s", salt, pwdStr))
-
-	o := orm.NewOrm()
-	_, e := o.Insert(admin)
-	if e != nil {
-		beego.Warn("%v is exit in database", admin.Name)
-	}
 	orm.RegisterModel(new(User), new(Profile))
 }
 
-func generateAdmin() *User {
+func GenerateAdmin() *User {
 	var adamin = new(User)
 	adamin.Name = "15152278073"
 	pwd := Password("45127996wind")
 	salt := pwd.GenerateSalt()
 	adamin.Pwd = Password(base64.URLEncoding.EncodeToString([]byte(fmt.Sprintf("%s$%s", salt, generateHash(salt, pwd)))))
+	adamin.Profile = &Profile{ID: 1, Desc: "一个吴彦祖"}
 	return adamin
 }
