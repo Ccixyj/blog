@@ -55,10 +55,10 @@ func generateHash(salt string, oldPwd Password) string {
 }
 
 type User struct {
-	ID      int64  `orm:"column(id)"`
-	Name    string `orm:"size(20);unique;index"`
-	Pwd     Password
-	Profile *Profile  `orm:"rel(fk);null;rel(one);on_delete(set_null)"`
+	ID      int64     `orm:"column(id)"`
+	Name    string    `orm:"size(20);unique;index"`
+	Pwd     Password  `json:"-"`
+	Profile *Profile  `orm:"rel(fk);null;rel(one);on_delete(set_null)" json:"-"`
 	Create  time.Time `orm:"auto_now_add;type(datetime)"`
 	Update  time.Time `orm:"auto_now;type(datetime)"`
 }

@@ -1,6 +1,11 @@
 package controllers
 
-import "github.com/astaxie/beego"
+import (
+	"BlogApi/models"
+	"fmt"
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
+)
 
 // User API
 type UserController struct {
@@ -18,7 +23,14 @@ func (ctx *UserController) URLMapping() {
 // @Success 200 { object } models.User.User
 // @router /all/:key [get]
 func (ctx *UserController) UserData() {
-	beego.Debug("Params", ctx.Ctx.Input.Params())
-	ctx.Data["json"] = map[string]string{"one": "abc", "two": "qwer"}
-	ctx.ServeJSON()
+	defer ctx.ServeJSON()
+	var users []*models.User
+	num, err := orm.NewOrm().QueryTable("user").Limit(-1).All(&users)
+	if err != nil {
+		beego.Error("查询所有用户错误")
+		return
+	}
+	beego.Debug(fmt.Sprintf("查询成功; 共%d条数据 ", num))
+	ctx.Data["json"] = models.NewSuccess("查询成功", users)
+
 }
